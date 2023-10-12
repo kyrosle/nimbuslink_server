@@ -6,3 +6,41 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+# convert protobuf file to rust code.
+protobuf = { version = "3.3.0", features = ["with-bytes"] }
+# async third party library
+tokio = { version = "1.32.0", features = ["full"] }
+tokio-util = { version = "0.7.9", features = ["full"] }
+futures = "0.3.28"
+futures-util = "0.3.28"
+# byte support library (better then Vec<u8>)
+bytes = { version = "1.5.0", features = ["serde"] }
+# logger support
+log = "0.4.20"
+env_logger = "0.10.0"
+# better control socket connection
+socket2 = { version = "0.5.4", features = ["all"] }
+# compress and decompress data
+zstd = "0.12.4"
+# http3 quic
+# qunn
+# conventionally handle Error type
+anyhow = "1.0.75"
+# serialize and deserialize
+serde = "1.0.188"
+serde_derive = "1.0.188"
+# global static declaration
+once_cell = "1.18.0"
+# time library
+chrono = "0.4.31"
+# random number generation
+rand = "0.8.5"
+# Rust bindings to the sodium library,encryption/decryption
+sodiumoxide = "0.2.7"
+
+
+[features]
+quic = []
+
+[build-dependencies]
+protobuf-codegen = "3.3.0"
