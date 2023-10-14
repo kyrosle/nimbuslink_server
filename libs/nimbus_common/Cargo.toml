@@ -11,6 +11,7 @@ protobuf = { version = "3.3.0", features = ["with-bytes"] }
 # async third party library
 tokio = { version = "1.32.0", features = ["full"] }
 tokio-util = { version = "0.7.9", features = ["full"] }
+tokio-socks = {git = "https://github.com/open-trade/tokio-socks"}
 futures = "0.3.28"
 futures-util = "0.3.28"
 # byte support library (better then Vec<u8>)

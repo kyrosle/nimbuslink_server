@@ -2,5 +2,18 @@
   "rust-analyzer.linkedProjects": [
     "./libs/nimbus_common/Cargo.toml",
     "./Cargo.toml"
+  ],
+  "cSpell.words": [
+    "Addrs",
+    "ciphertext",
+    "KEYBYTES",
+    "nodelay",
+    "NONCEBYTES",
+    "protobuf",
+    "PUBLICKEYBYTES",
+    "reuseaddr",
+    "reuseport",
+    "secretbox",
+    "sodiumoxide"
   ]
 }
