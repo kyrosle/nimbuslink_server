@@ -3,6 +3,8 @@ pub mod bytes_codec;
 pub mod socket_client;
 pub mod tcp;
 pub mod udp;
+pub mod compress;
+pub mod config;
 
 // extern
 pub use bytes;
