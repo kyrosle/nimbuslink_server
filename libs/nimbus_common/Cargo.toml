@@ -9,9 +9,9 @@ edition = "2021"
 # convert protobuf file to rust code.
 protobuf = { version = "3.3.0", features = ["with-bytes"] }
 # async third party library
-tokio = { version = "1.32.0", features = ["full"] }
+tokio = { version = "1.33.0", features = ["full"] }
 tokio-util = { version = "0.7.9", features = ["full"] }
-tokio-socks = {git = "https://github.com/open-trade/tokio-socks"}
+tokio-socks = { git = "https://github.com/open-trade/tokio-socks" }
 futures = "0.3.28"
 futures-util = "0.3.28"
 # byte support library (better then Vec<u8>)
@@ -22,7 +22,7 @@ env_logger = "0.10.0"
 # better control socket connection
 socket2 = { version = "0.5.4", features = ["all"] }
 # compress and decompress data
-zstd = "0.12.4"
+zstd = "0.13.0"
 # http3 quic
 # qunn
 # conventionally handle Error type
@@ -38,7 +38,11 @@ chrono = "0.4.31"
 rand = "0.8.5"
 # Rust bindings to the sodium library,encryption/decryption
 sodiumoxide = "0.2.7"
+# regex match
+regex = "1.10.0"
 
+[dev-dependencies]
+pretty_assertions = "1.4.0"
 
 [features]
 quic = []
