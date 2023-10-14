@@ -1,9 +1,14 @@
 use std::net::SocketAddr;
 
 use anyhow::Context;
-use tokio_socks::TargetAddr;
+use tokio_socks::{IntoTargetAddr, TargetAddr};
 
-use crate::{is_ipv4_str, is_ipv6_str, tcp::FramedStream, ResultType};
+use crate::{
+  config::{Config, NetWorkType},
+  is_ipv4_str, is_ipv6_str,
+  tcp::FramedStream,
+  ResultType,
+};
 
 pub mod is_resolved_socket_addr;
 
@@ -45,6 +50,22 @@ pub fn increase_port<T: std::string::ToString>(host: T, offset: i32) -> String {
     }
   }
   host
+}
+
+pub fn test_if_valid_server(host: &str) -> String {
+  let host = check_port(host, 0);
+
+  use std::net::ToSocketAddrs;
+  match Config::get_network_type() {
+    NetWorkType::Direct => match host.to_socket_addrs() {
+      Err(err) => err.to_string(),
+      Ok(_) => "".to_owned(),
+    },
+    NetWorkType::ProxySocks => match &host.into_target_addr() {
+      Err(err) => err.to_string(),
+      Ok(_) => "".to_owned(),
+    },
+  }
 }
 
 #[inline]
@@ -129,6 +150,13 @@ mod tests {
     }
 
     assert!(query_nip_io(&"1.1.1.1:80".parse().unwrap()).await.is_err());
+  }
+
+  #[test]
+  fn test_test_if_valid_server() {
+    assert!(!test_if_valid_server("a").is_empty());
+    assert!(test_if_valid_server("1.1.1.1").is_empty());
+    assert!(test_if_valid_server("1.1.1.1:1").is_empty());
   }
 
   #[test]

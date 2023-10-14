@@ -51,8 +51,7 @@ impl FramedStream {
       let local = if let Some(addr) = local_addr {
         addr
       } else {
-        // from config
-        unimplemented!();
+        crate::config::Config::get_any_listen_addr(remote_addr.is_ipv4())
       };
 
       if let Ok(socket) = super::new_socket(local, true) {
@@ -95,8 +94,7 @@ impl FramedStream {
       let local = if let Some(addr) = local_addr {
         addr
       } else {
-        // form config
-        unimplemented!();
+        crate::config::Config::get_any_listen_addr(proxy.is_ipv4())
       };
 
       let stream = crate::timeout(
