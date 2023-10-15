@@ -3,6 +3,7 @@ use std::net::SocketAddr;
 use anyhow::{anyhow, Context};
 use bytes::{Bytes, BytesMut};
 use futures_util::{SinkExt, StreamExt};
+use protobuf::Message;
 use tokio::net::{lookup_host, ToSocketAddrs, UdpSocket};
 use tokio_socks::{
   udp::Socks5UdpFramed, IntoTargetAddr, TargetAddr, ToProxyAddrs,
@@ -69,6 +70,27 @@ impl FramedSocket {
     Ok(FramedSocket::ProxySocks(framed))
   }
 
+  #[inline]
+  pub async fn send(
+    &mut self,
+    msg: &impl Message,
+    addr: impl IntoTargetAddr<'_>,
+  ) -> ResultType<()> {
+    let addr = addr.into_target_addr()?.to_owned();
+    let send_data = Bytes::from(msg.write_to_bytes()?);
+    match self {
+      FramedSocket::Direct(stream) => {
+        if let TargetAddr::Ip(addr) = addr {
+          stream.send((send_data, addr)).await?
+        }
+      }
+      FramedSocket::ProxySocks(stream) => {
+        stream.send((send_data, addr)).await?
+      }
+    }
+    Ok(())
+  }
+
   // https://stackoverflow.com/a/68733302/1926020
   #[inline]
   pub async fn send_raw(
@@ -79,13 +101,13 @@ impl FramedSocket {
     let addr = addr.into_target_addr()?.to_owned();
 
     match self {
-      FramedSocket::Direct(framed_socket) => {
+      FramedSocket::Direct(stream) => {
         if let TargetAddr::Ip(addr) = addr {
-          framed_socket.send((Bytes::from(msg), addr)).await?
+          stream.send((Bytes::from(msg), addr)).await?
         }
       }
-      FramedSocket::ProxySocks(framed_socket) => {
-        framed_socket.send((Bytes::from(msg), addr)).await?
+      FramedSocket::ProxySocks(stream) => {
+        stream.send((Bytes::from(msg), addr)).await?
       }
     };
 
@@ -97,20 +119,18 @@ impl FramedSocket {
     &mut self,
   ) -> Option<ResultType<(BytesMut, TargetAddr<'static>)>> {
     match self {
-      FramedSocket::Direct(framed_socket) => match framed_socket.next().await {
+      FramedSocket::Direct(stream) => match stream.next().await {
         Some(Ok((data, addr))) => {
           Some(Ok((data, addr.into_target_addr().ok()?.to_owned())))
         }
         Some(Err(e)) => Some(Err(anyhow!(e))),
         None => None,
       },
-      FramedSocket::ProxySocks(framed_socket) => {
-        match framed_socket.next().await {
-          Some(Ok((data, _))) => Some(Ok((data.data, data.dst_addr))),
-          Some(Err(e)) => Some(Err(anyhow!(e))),
-          None => None,
-        }
-      }
+      FramedSocket::ProxySocks(stream) => match stream.next().await {
+        Some(Ok((data, _))) => Some(Ok((data.data, data.dst_addr))),
+        Some(Err(e)) => Some(Err(anyhow!(e))),
+        None => None,
+      },
     }
   }
 
