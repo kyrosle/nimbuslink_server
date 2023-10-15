@@ -1,0 +1,83 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "lldb",
+      "request": "launch",
+      "name": "Debug unit tests in library 'nimbus_common'",
+      "cargo": {
+        "args": [
+          "test",
+          "--no-run",
+          "--lib",
+          "--package=nimbus_common"
+        ],
+        "filter": {
+          "name": "nimbus_common",
+          "kind": "lib"
+        }
+      },
+      "args": [],
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "type": "lldb",
+      "request": "launch",
+      "name": "Debug unit tests in library 'nimbuslink_server'",
+      "cargo": {
+        "args": [
+          "test",
+          "--no-run",
+          "--lib",
+          "--package=nimbuslink_server"
+        ],
+        "filter": {
+          "name": "nimbuslink_server",
+          "kind": "lib"
+        }
+      },
+      "args": [],
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "type": "lldb",
+      "request": "launch",
+      "name": "Debug executable 'nimbuslink_server'",
+      "cargo": {
+        "args": [
+          "build",
+          "--bin=nimbuslink_server",
+          "--package=nimbuslink_server"
+        ],
+        "filter": {
+          "name": "nimbuslink_server",
+          "kind": "bin"
+        }
+      },
+      "args": [],
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "type": "lldb",
+      "request": "launch",
+      "name": "Debug unit tests in executable 'nimbuslink_server'",
+      "cargo": {
+        "args": [
+          "test",
+          "--no-run",
+          "--bin=nimbuslink_server",
+          "--package=nimbuslink_server"
+        ],
+        "filter": {
+          "name": "nimbuslink_server",
+          "kind": "bin"
+        }
+      },
+      "args": [],
+      "cwd": "${workspaceFolder}"
+    }
+  ]
+}
