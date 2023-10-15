@@ -14,6 +14,11 @@ pub use log;
 pub use tokio;
 pub use tokio_util;
 
+// export the logger function
+pub mod logger {
+  pub use log::{debug, error, info, warn, trace};
+}
+
 pub type ResultType<F, E = anyhow::Error> = anyhow::Result<F, E>;
 
 #[inline]
