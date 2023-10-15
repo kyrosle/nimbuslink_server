@@ -19,7 +19,11 @@ pub enum FramedSocket {
 }
 
 impl FramedSocket {
-  pub async fn new<T: ToSocketAddrs>(
+  pub async fn new<T: ToSocketAddrs>(addr: T) -> ResultType<Self> {
+    FramedSocket::new_reuse(addr, false, 0).await
+  }
+
+  pub async fn new_reuse<T: ToSocketAddrs>(
     addr: T,
     reuse: bool,
     buf_size: usize,
