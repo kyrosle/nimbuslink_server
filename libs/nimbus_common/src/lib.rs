@@ -1,10 +1,13 @@
 // common module
 pub mod bytes_codec;
+pub mod compress;
+pub mod config;
 pub mod socket_client;
 pub mod tcp;
 pub mod udp;
 pub mod compress;
 pub mod config;
+pub mod protos;
 
 // extern
 pub use bytes;
@@ -13,6 +16,8 @@ pub use futures;
 pub use log;
 pub use tokio;
 pub use tokio_util;
+pub use anyhow;
+pub use protobuf;
 
 // export the logger function
 pub mod logger {

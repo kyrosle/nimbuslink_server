@@ -6,6 +6,7 @@
   "cSpell.words": [
     "Addrs",
     "ciphertext",
+    "codegen",
     "Decompressor",
     "DGRAM",
     "flexi",
@@ -14,7 +15,9 @@
     "nodelay",
     "nonblocking",
     "NONCEBYTES",
+    "proto",
     "protobuf",
+    "protos",
     "PUBLICKEYBYTES",
     "reuseaddr",
     "reuseport",
