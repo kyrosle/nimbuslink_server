@@ -4,19 +4,39 @@ use std::{
 };
 
 mod test;
+mod udp_handler;
+use udp_handler::*;
+mod port_listener_handler;
+use port_listener_handler::*;
+mod function_listener_handler;
+use function_listener_handler::*;
+mod tcp_handler;
+use tcp_handler::*;
 
 use nimbus_common::{
-  bytes::BytesMut,
+  bytes::Bytes,
+  bytes_codec::BytesCodec,
+  futures::stream::SplitSink,
   logger::*,
-  protobuf::Message,
-  protos::rendezvous::{
-    rendezvous_message, RegisterPeerResponse, RendezvousMessage,
-  },
   tcp::listen_any,
-  tokio::{self, net::TcpListener},
+  tokio::{
+    self,
+    net::{TcpListener, TcpStream},
+  },
+  tokio_util::codec::Framed,
   udp::FramedSocket,
   ResultType,
 };
+
+type TcpStreamSink = SplitSink<Framed<TcpStream, BytesCodec>, Bytes>;
+type WsSink = SplitSink<
+  tokio_tungstenite::WebSocketStream<TcpStream>,
+  tungstenite::Message,
+>;
+enum Sink {
+  TcpStream(TcpStreamSink),
+  Ws(WsSink),
+}
 
 struct Inner {
   local_ip: String,
@@ -134,6 +154,42 @@ impl RendezvousServer {
   ) -> LoopFailure {
     loop {
       tokio::select! {
+        res = port_listener.accept() => {
+          match res {
+            Ok((stream, addr)) => {
+              stream.set_nodelay(true).ok();
+              self.handle_port_listener(stream, addr).await;
+            }
+            Err(err) => {
+              error!("port listener accept failure: {}", err);
+              return LoopFailure::PortListener;
+            }
+          }
+        }
+        res = nat_listener.accept() => {
+          match res {
+            Ok((stream, addr)) => {
+              stream.set_nodelay(true).ok();
+              self.handle_function_listener(stream, addr, "", false).await;
+            }
+            Err(err) => {
+              error!("nat listener accept failure: {}", err);
+              return LoopFailure::NatListener;
+            }
+          }
+        }
+        res = ws_listener.accept() => {
+          match res {
+            Ok((stream, addr)) => {
+              stream.set_nodelay(true).ok();
+              self.handle_function_listener(stream, addr, "", true).await;
+            }
+            Err(err) => {
+              error!("websocket listener accept failure: {}", err);
+              return LoopFailure::WsListener;
+            }
+          }
+        }
         res = udp_socket.next() => {
           match res {
             Some(Ok((bytes, addr))) => {
@@ -153,28 +209,6 @@ impl RendezvousServer {
         }
       }
     }
-  }
-
-  #[inline]
-  async fn handle_udp(
-    &mut self,
-    bytes: &BytesMut,
-    addr: SocketAddr,
-    udp_socket: &mut FramedSocket,
-  ) -> ResultType<()> {
-    if let Ok(msg_in) = RendezvousMessage::parse_from_bytes(bytes) {
-      #[allow(clippy::single_match)] /* FIXME: for now */
-      match msg_in.union {
-        Some(rendezvous_message::Union::RegisterPeer(rp)) => {
-          debug!("Rendezvous Message RegisterPeer from {}: {:?}", addr, rp);
-          let mut msg_out = RendezvousMessage::new();
-          msg_out.set_register_peer_response(RegisterPeerResponse::default());
-          udp_socket.send(&msg_out, addr).await?;
-        }
-        _ => {}
-      }
-    }
-    Ok(())
   }
 }
 
