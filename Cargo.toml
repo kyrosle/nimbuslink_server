@@ -11,4 +11,8 @@ members = ["libs/nimbus_common"]
 nimbus_common = { path = "libs/nimbus_common" }
 # logger
 flexi_logger = { version = "0.27.2", features = ["async", "colors"] }
+# get local ip address
 local-ip-address = "0.5.6"
+# web socket
+tungstenite = "0.20.1"
+tokio-tungstenite = "0.20.1"
