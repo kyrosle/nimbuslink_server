@@ -28,7 +28,7 @@ fn new_socket(
     socket.set_recv_buffer_size(buf_size).ok();
   }
   info!(
-    "Receive buf size of udp {}: {:?}",
+    "Receive buf size of udp {} - {:?}",
     addr,
     socket.recv_buffer_size()
   );

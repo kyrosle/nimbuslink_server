@@ -1,12 +1,13 @@
 use std::net::SocketAddr;
 
 use anyhow::Context;
+use tokio::net::ToSocketAddrs;
 use tokio_socks::{IntoTargetAddr, TargetAddr};
 
 use crate::{
   config::{Config, NetWorkType},
   is_ipv4_str, is_ipv6_str,
-  tcp::FramedStream,
+  udp::FramedSocket,
   ResultType,
 };
 
@@ -112,6 +113,32 @@ async fn test_target(target: &str) -> ResultType<SocketAddr> {
     .next()
     .context(format!("Failed to lookup host for {target}"))
 }
+
+#[inline]
+pub async fn new_udp_for(
+  target: &str,
+  ms_timeout: u64,
+) -> ResultType<(FramedSocket, TargetAddr<'_>)> {
+  let (ipv4, target) = if NetWorkType::Direct == Config::get_network_type() {
+    let addr = test_target(target).await?;
+    (addr.is_ipv4(), addr.into_target_addr()?)
+  } else {
+    (true, target.into_target_addr()?)
+  };
+
+  Ok((
+    new_udp(Config::get_any_listen_addr(ipv4), ms_timeout).await?,
+    target.to_owned(),
+  ))
+}
+
+async fn new_udp<T: ToSocketAddrs>(
+  local: T,
+  ms_timeout: u64,
+) -> ResultType<FramedSocket> {
+  FramedSocket::new(local).await
+}
+
 #[cfg(test)]
 mod tests {
   use super::*;

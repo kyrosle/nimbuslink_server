@@ -17,6 +17,7 @@ static CONFIG: Lazy<Arc<RwLock<Config>>> =
 static CONFIG2: Lazy<Arc<RwLock<Config2>>> =
   Lazy::new(|| Arc::new(RwLock::new(Config2 { socks: None })));
 
+#[derive(Clone, Copy, PartialEq, Eq, Debug)]
 pub enum NetWorkType {
   Direct,
   ProxySocks,
