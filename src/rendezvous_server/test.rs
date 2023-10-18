@@ -34,14 +34,19 @@ pub(crate) async fn test_nimbus(addr: SocketAddr) -> ResultType<()> {
     ..Default::default()
   });
   let mut last_time_recv = Instant::now();
+  let start_time = Instant::now();
 
   let mut timer = interval(Duration::from_secs(1));
 
   loop {
     tokio::select! {
       _ = timer.tick() => {
-        if last_time_recv.elapsed().as_secs() > 12 {
+        if last_time_recv.elapsed().as_secs() > 5 {
           bail!("Timeout of test_nimbus");
+        }
+        if start_time.elapsed().as_secs() > 10 {
+          info!("test_nimbus for 10 seconds finished, exit the test case");
+          return Ok(());
         }
         socket.send(&msg_out, addr).await?;
       }
