@@ -1,27 +1,32 @@
 use std::{
   net::{IpAddr, Ipv4Addr, Ipv6Addr, SocketAddr},
   sync::Arc,
+  time::Duration,
 };
 
-mod test;
+mod test_nimbus;
 mod udp_handler;
 use udp_handler::*;
 mod port_listener_handler;
 use port_listener_handler::*;
-mod function_listener_handler;
-use function_listener_handler::*;
+mod nat_listener_handler;
+use nat_listener_handler::*;
+mod ws_listener_handler;
+use ws_listener_handler::*;
 mod tcp_handler;
 use tcp_handler::*;
 
 use nimbus_common::{
   bytes::Bytes,
   bytes_codec::BytesCodec,
+  config::SERIAL,
   futures::stream::SplitSink,
   logger::*,
   tcp::listen_any,
   tokio::{
     self,
     net::{TcpListener, TcpStream},
+    time::interval,
   },
   tokio_util::codec::Framed,
   udp::FramedSocket,
@@ -33,15 +38,19 @@ type WsSink = SplitSink<
   tokio_tungstenite::WebSocketStream<TcpStream>,
   tungstenite::Message,
 >;
+static CHECK_RELAY_TIMEOUT: u64 = 3_000;
+
 enum Sink {
   TcpStream(TcpStreamSink),
   Ws(WsSink),
 }
 
 struct Inner {
+  serial: i32,
   local_ip: String,
 }
 
+#[derive(Clone)]
 pub struct RendezvousServer {
   inner: Arc<Inner>,
 }
@@ -75,7 +84,10 @@ impl RendezvousServer {
       .unwrap_or_default();
 
     let mut rendezvous_server = RendezvousServer {
-      inner: Arc::new(Inner { local_ip }),
+      inner: Arc::new(Inner {
+        local_ip,
+        serial: SERIAL,
+      }),
     };
 
     let mut port_listener = create_tcp_listener(port).await?;
@@ -86,13 +98,13 @@ impl RendezvousServer {
     // test
     tokio::spawn(async move {
       info!("first test address: {}", test_addr);
-      if let Err(err) = test::test_nimbus(test_addr).await {
+      if let Err(err) = test_nimbus::test_nimbus(test_addr).await {
         if test_addr.is_ipv6() && test_addr.ip().is_unspecified() {
           let mut test_addr = test_addr;
           test_addr.set_ip(IpAddr::V4(Ipv4Addr::UNSPECIFIED));
 
           info!("second test address: {}", test_addr);
-          if let Err(err) = test::test_nimbus(test_addr).await {
+          if let Err(err) = test_nimbus::test_nimbus(test_addr).await {
             error!("Failed to run test_nimbus with {}: {}", test_addr, err);
             std::process::exit(1);
           }
@@ -152,13 +164,18 @@ impl RendezvousServer {
     ws_listener: &mut TcpListener,
     udp_socket: &mut FramedSocket,
   ) -> LoopFailure {
+    let mut timer_check_relay =
+      interval(Duration::from_millis(CHECK_RELAY_TIMEOUT));
     loop {
       tokio::select! {
+        _ = timer_check_relay.tick() => {
+          trace!("timer check relay");
+        }
         res = port_listener.accept() => {
           match res {
             Ok((stream, addr)) => {
               stream.set_nodelay(true).ok();
-              self.handle_port_listener(stream, addr).await;
+              self.handle_port_listener(stream, addr, "").await;
             }
             Err(err) => {
               error!("port listener accept failure: {}", err);
@@ -170,7 +187,7 @@ impl RendezvousServer {
           match res {
             Ok((stream, addr)) => {
               stream.set_nodelay(true).ok();
-              self.handle_function_listener(stream, addr, "", false).await;
+              self.handle_nat_listener(stream, addr).await;
             }
             Err(err) => {
               error!("nat listener accept failure: {}", err);
@@ -182,7 +199,7 @@ impl RendezvousServer {
           match res {
             Ok((stream, addr)) => {
               stream.set_nodelay(true).ok();
-              self.handle_function_listener(stream, addr, "", true).await;
+              self.handle_ws_listener(stream, addr, "").await;
             }
             Err(err) => {
               error!("websocket listener accept failure: {}", err);
@@ -209,6 +226,23 @@ impl RendezvousServer {
         }
       }
     }
+  }
+
+  async fn check_cmd(&self, cmd: &str) -> String {
+    use std::fmt::Write as _;
+
+    let mut res = "".to_owned();
+    let mut fds = cmd.trim().split(' ');
+    match fds.next() {
+      Some("h") => {}
+      Some("relay-servers" | "rs") => {}
+      Some("ip-blocker" | "ib") => {}
+      Some("ip-change" | "ic") => {}
+      Some("always-use-relay" | "aur") => {}
+      Some("test-geo" | "tg") => {}
+      _ => {}
+    }
+    res
   }
 }
 
