@@ -6,7 +6,6 @@ pub use framed_stream::FramedSocket;
 
 use crate::logger::*;
 
-
 fn new_socket(
   addr: SocketAddr,
   reuse: bool,
