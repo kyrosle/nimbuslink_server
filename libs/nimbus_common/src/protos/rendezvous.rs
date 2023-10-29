@@ -287,6 +287,408 @@ impl ::protobuf::reflect::ProtobufValue for RegisterPeerResponse {
     type RuntimeType = ::protobuf::reflect::rt::RuntimeTypeMessage<Self>;
 }
 
+// @@protoc_insertion_point(message:nimbus.PunchHole)
+#[derive(PartialEq,Clone,Default,Debug)]
+pub struct PunchHole {
+    // message fields
+    // @@protoc_insertion_point(field:nimbus.PunchHole.socket_addr)
+    pub socket_addr: ::bytes::Bytes,
+    // @@protoc_insertion_point(field:nimbus.PunchHole.relay_server)
+    pub relay_server: ::std::string::String,
+    // @@protoc_insertion_point(field:nimbus.PunchHole.nat_type)
+    pub nat_type: ::protobuf::EnumOrUnknown<NatType>,
+    // special fields
+    // @@protoc_insertion_point(special_field:nimbus.PunchHole.special_fields)
+    pub special_fields: ::protobuf::SpecialFields,
+}
+
+impl<'a> ::std::default::Default for &'a PunchHole {
+    fn default() -> &'a PunchHole {
+        <PunchHole as ::protobuf::Message>::default_instance()
+    }
+}
+
+impl PunchHole {
+    pub fn new() -> PunchHole {
+        ::std::default::Default::default()
+    }
+
+    fn generated_message_descriptor_data() -> ::protobuf::reflect::GeneratedMessageDescriptorData {
+        let mut fields = ::std::vec::Vec::with_capacity(3);
+        let mut oneofs = ::std::vec::Vec::with_capacity(0);
+        fields.push(::protobuf::reflect::rt::v2::make_simpler_field_accessor::<_, _>(
+            "socket_addr",
+            |m: &PunchHole| { &m.socket_addr },
+            |m: &mut PunchHole| { &mut m.socket_addr },
+        ));
+        fields.push(::protobuf::reflect::rt::v2::make_simpler_field_accessor::<_, _>(
+            "relay_server",
+            |m: &PunchHole| { &m.relay_server },
+            |m: &mut PunchHole| { &mut m.relay_server },
+        ));
+        fields.push(::protobuf::reflect::rt::v2::make_simpler_field_accessor::<_, _>(
+            "nat_type",
+            |m: &PunchHole| { &m.nat_type },
+            |m: &mut PunchHole| { &mut m.nat_type },
+        ));
+        ::protobuf::reflect::GeneratedMessageDescriptorData::new_2::<PunchHole>(
+            "PunchHole",
+            fields,
+            oneofs,
+        )
+    }
+}
+
+impl ::protobuf::Message for PunchHole {
+    const NAME: &'static str = "PunchHole";
+
+    fn is_initialized(&self) -> bool {
+        true
+    }
+
+    fn merge_from(&mut self, is: &mut ::protobuf::CodedInputStream<'_>) -> ::protobuf::Result<()> {
+        while let Some(tag) = is.read_raw_tag_or_eof()? {
+            match tag {
+                10 => {
+                    self.socket_addr = is.read_tokio_bytes()?;
+                },
+                18 => {
+                    self.relay_server = is.read_string()?;
+                },
+                24 => {
+                    self.nat_type = is.read_enum_or_unknown()?;
+                },
+                tag => {
+                    ::protobuf::rt::read_unknown_or_skip_group(tag, is, self.special_fields.mut_unknown_fields())?;
+                },
+            };
+        }
+        ::std::result::Result::Ok(())
+    }
+
+    // Compute sizes of nested messages
+    #[allow(unused_variables)]
+    fn compute_size(&self) -> u64 {
+        let mut my_size = 0;
+        if !self.socket_addr.is_empty() {
+            my_size += ::protobuf::rt::bytes_size(1, &self.socket_addr);
+        }
+        if !self.relay_server.is_empty() {
+            my_size += ::protobuf::rt::string_size(2, &self.relay_server);
+        }
+        if self.nat_type != ::protobuf::EnumOrUnknown::new(NatType::UNKNOWN_NAT) {
+            my_size += ::protobuf::rt::int32_size(3, self.nat_type.value());
+        }
+        my_size += ::protobuf::rt::unknown_fields_size(self.special_fields.unknown_fields());
+        self.special_fields.cached_size().set(my_size as u32);
+        my_size
+    }
+
+    fn write_to_with_cached_sizes(&self, os: &mut ::protobuf::CodedOutputStream<'_>) -> ::protobuf::Result<()> {
+        if !self.socket_addr.is_empty() {
+            os.write_bytes(1, &self.socket_addr)?;
+        }
+        if !self.relay_server.is_empty() {
+            os.write_string(2, &self.relay_server)?;
+        }
+        if self.nat_type != ::protobuf::EnumOrUnknown::new(NatType::UNKNOWN_NAT) {
+            os.write_enum(3, ::protobuf::EnumOrUnknown::value(&self.nat_type))?;
+        }
+        os.write_unknown_fields(self.special_fields.unknown_fields())?;
+        ::std::result::Result::Ok(())
+    }
+
+    fn special_fields(&self) -> &::protobuf::SpecialFields {
+        &self.special_fields
+    }
+
+    fn mut_special_fields(&mut self) -> &mut ::protobuf::SpecialFields {
+        &mut self.special_fields
+    }
+
+    fn new() -> PunchHole {
+        PunchHole::new()
+    }
+
+    fn clear(&mut self) {
+        self.socket_addr.clear();
+        self.relay_server.clear();
+        self.nat_type = ::protobuf::EnumOrUnknown::new(NatType::UNKNOWN_NAT);
+        self.special_fields.clear();
+    }
+
+    fn default_instance() -> &'static PunchHole {
+        static instance: PunchHole = PunchHole {
+            socket_addr: ::bytes::Bytes::new(),
+            relay_server: ::std::string::String::new(),
+            nat_type: ::protobuf::EnumOrUnknown::from_i32(0),
+            special_fields: ::protobuf::SpecialFields::new(),
+        };
+        &instance
+    }
+}
+
+impl ::protobuf::MessageFull for PunchHole {
+    fn descriptor() -> ::protobuf::reflect::MessageDescriptor {
+        static descriptor: ::protobuf::rt::Lazy<::protobuf::reflect::MessageDescriptor> = ::protobuf::rt::Lazy::new();
+        descriptor.get(|| file_descriptor().message_by_package_relative_name("PunchHole").unwrap()).clone()
+    }
+}
+
+impl ::std::fmt::Display for PunchHole {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        ::protobuf::text_format::fmt(self, f)
+    }
+}
+
+impl ::protobuf::reflect::ProtobufValue for PunchHole {
+    type RuntimeType = ::protobuf::reflect::rt::RuntimeTypeMessage<Self>;
+}
+
+// @@protoc_insertion_point(message:nimbus.TestNatRequest)
+#[derive(PartialEq,Clone,Default,Debug)]
+pub struct TestNatRequest {
+    // message fields
+    // @@protoc_insertion_point(field:nimbus.TestNatRequest.serial)
+    pub serial: i32,
+    // special fields
+    // @@protoc_insertion_point(special_field:nimbus.TestNatRequest.special_fields)
+    pub special_fields: ::protobuf::SpecialFields,
+}
+
+impl<'a> ::std::default::Default for &'a TestNatRequest {
+    fn default() -> &'a TestNatRequest {
+        <TestNatRequest as ::protobuf::Message>::default_instance()
+    }
+}
+
+impl TestNatRequest {
+    pub fn new() -> TestNatRequest {
+        ::std::default::Default::default()
+    }
+
+    fn generated_message_descriptor_data() -> ::protobuf::reflect::GeneratedMessageDescriptorData {
+        let mut fields = ::std::vec::Vec::with_capacity(1);
+        let mut oneofs = ::std::vec::Vec::with_capacity(0);
+        fields.push(::protobuf::reflect::rt::v2::make_simpler_field_accessor::<_, _>(
+            "serial",
+            |m: &TestNatRequest| { &m.serial },
+            |m: &mut TestNatRequest| { &mut m.serial },
+        ));
+        ::protobuf::reflect::GeneratedMessageDescriptorData::new_2::<TestNatRequest>(
+            "TestNatRequest",
+            fields,
+            oneofs,
+        )
+    }
+}
+
+impl ::protobuf::Message for TestNatRequest {
+    const NAME: &'static str = "TestNatRequest";
+
+    fn is_initialized(&self) -> bool {
+        true
+    }
+
+    fn merge_from(&mut self, is: &mut ::protobuf::CodedInputStream<'_>) -> ::protobuf::Result<()> {
+        while let Some(tag) = is.read_raw_tag_or_eof()? {
+            match tag {
+                8 => {
+                    self.serial = is.read_int32()?;
+                },
+                tag => {
+                    ::protobuf::rt::read_unknown_or_skip_group(tag, is, self.special_fields.mut_unknown_fields())?;
+                },
+            };
+        }
+        ::std::result::Result::Ok(())
+    }
+
+    // Compute sizes of nested messages
+    #[allow(unused_variables)]
+    fn compute_size(&self) -> u64 {
+        let mut my_size = 0;
+        if self.serial != 0 {
+            my_size += ::protobuf::rt::int32_size(1, self.serial);
+        }
+        my_size += ::protobuf::rt::unknown_fields_size(self.special_fields.unknown_fields());
+        self.special_fields.cached_size().set(my_size as u32);
+        my_size
+    }
+
+    fn write_to_with_cached_sizes(&self, os: &mut ::protobuf::CodedOutputStream<'_>) -> ::protobuf::Result<()> {
+        if self.serial != 0 {
+            os.write_int32(1, self.serial)?;
+        }
+        os.write_unknown_fields(self.special_fields.unknown_fields())?;
+        ::std::result::Result::Ok(())
+    }
+
+    fn special_fields(&self) -> &::protobuf::SpecialFields {
+        &self.special_fields
+    }
+
+    fn mut_special_fields(&mut self) -> &mut ::protobuf::SpecialFields {
+        &mut self.special_fields
+    }
+
+    fn new() -> TestNatRequest {
+        TestNatRequest::new()
+    }
+
+    fn clear(&mut self) {
+        self.serial = 0;
+        self.special_fields.clear();
+    }
+
+    fn default_instance() -> &'static TestNatRequest {
+        static instance: TestNatRequest = TestNatRequest {
+            serial: 0,
+            special_fields: ::protobuf::SpecialFields::new(),
+        };
+        &instance
+    }
+}
+
+impl ::protobuf::MessageFull for TestNatRequest {
+    fn descriptor() -> ::protobuf::reflect::MessageDescriptor {
+        static descriptor: ::protobuf::rt::Lazy<::protobuf::reflect::MessageDescriptor> = ::protobuf::rt::Lazy::new();
+        descriptor.get(|| file_descriptor().message_by_package_relative_name("TestNatRequest").unwrap()).clone()
+    }
+}
+
+impl ::std::fmt::Display for TestNatRequest {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        ::protobuf::text_format::fmt(self, f)
+    }
+}
+
+impl ::protobuf::reflect::ProtobufValue for TestNatRequest {
+    type RuntimeType = ::protobuf::reflect::rt::RuntimeTypeMessage<Self>;
+}
+
+// @@protoc_insertion_point(message:nimbus.TestNatResponse)
+#[derive(PartialEq,Clone,Default,Debug)]
+pub struct TestNatResponse {
+    // message fields
+    // @@protoc_insertion_point(field:nimbus.TestNatResponse.port)
+    pub port: i32,
+    // special fields
+    // @@protoc_insertion_point(special_field:nimbus.TestNatResponse.special_fields)
+    pub special_fields: ::protobuf::SpecialFields,
+}
+
+impl<'a> ::std::default::Default for &'a TestNatResponse {
+    fn default() -> &'a TestNatResponse {
+        <TestNatResponse as ::protobuf::Message>::default_instance()
+    }
+}
+
+impl TestNatResponse {
+    pub fn new() -> TestNatResponse {
+        ::std::default::Default::default()
+    }
+
+    fn generated_message_descriptor_data() -> ::protobuf::reflect::GeneratedMessageDescriptorData {
+        let mut fields = ::std::vec::Vec::with_capacity(1);
+        let mut oneofs = ::std::vec::Vec::with_capacity(0);
+        fields.push(::protobuf::reflect::rt::v2::make_simpler_field_accessor::<_, _>(
+            "port",
+            |m: &TestNatResponse| { &m.port },
+            |m: &mut TestNatResponse| { &mut m.port },
+        ));
+        ::protobuf::reflect::GeneratedMessageDescriptorData::new_2::<TestNatResponse>(
+            "TestNatResponse",
+            fields,
+            oneofs,
+        )
+    }
+}
+
+impl ::protobuf::Message for TestNatResponse {
+    const NAME: &'static str = "TestNatResponse";
+
+    fn is_initialized(&self) -> bool {
+        true
+    }
+
+    fn merge_from(&mut self, is: &mut ::protobuf::CodedInputStream<'_>) -> ::protobuf::Result<()> {
+        while let Some(tag) = is.read_raw_tag_or_eof()? {
+            match tag {
+                8 => {
+                    self.port = is.read_int32()?;
+                },
+                tag => {
+                    ::protobuf::rt::read_unknown_or_skip_group(tag, is, self.special_fields.mut_unknown_fields())?;
+                },
+            };
+        }
+        ::std::result::Result::Ok(())
+    }
+
+    // Compute sizes of nested messages
+    #[allow(unused_variables)]
+    fn compute_size(&self) -> u64 {
+        let mut my_size = 0;
+        if self.port != 0 {
+            my_size += ::protobuf::rt::int32_size(1, self.port);
+        }
+        my_size += ::protobuf::rt::unknown_fields_size(self.special_fields.unknown_fields());
+        self.special_fields.cached_size().set(my_size as u32);
+        my_size
+    }
+
+    fn write_to_with_cached_sizes(&self, os: &mut ::protobuf::CodedOutputStream<'_>) -> ::protobuf::Result<()> {
+        if self.port != 0 {
+            os.write_int32(1, self.port)?;
+        }
+        os.write_unknown_fields(self.special_fields.unknown_fields())?;
+        ::std::result::Result::Ok(())
+    }
+
+    fn special_fields(&self) -> &::protobuf::SpecialFields {
+        &self.special_fields
+    }
+
+    fn mut_special_fields(&mut self) -> &mut ::protobuf::SpecialFields {
+        &mut self.special_fields
+    }
+
+    fn new() -> TestNatResponse {
+        TestNatResponse::new()
+    }
+
+    fn clear(&mut self) {
+        self.port = 0;
+        self.special_fields.clear();
+    }
+
+    fn default_instance() -> &'static TestNatResponse {
+        static instance: TestNatResponse = TestNatResponse {
+            port: 0,
+            special_fields: ::protobuf::SpecialFields::new(),
+        };
+        &instance
+    }
+}
+
+impl ::protobuf::MessageFull for TestNatResponse {
+    fn descriptor() -> ::protobuf::reflect::MessageDescriptor {
+        static descriptor: ::protobuf::rt::Lazy<::protobuf::reflect::MessageDescriptor> = ::protobuf::rt::Lazy::new();
+        descriptor.get(|| file_descriptor().message_by_package_relative_name("TestNatResponse").unwrap()).clone()
+    }
+}
+
+impl ::std::fmt::Display for TestNatResponse {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        ::protobuf::text_format::fmt(self, f)
+    }
+}
+
+impl ::protobuf::reflect::ProtobufValue for TestNatResponse {
+    type RuntimeType = ::protobuf::reflect::rt::RuntimeTypeMessage<Self>;
+}
+
 // @@protoc_insertion_point(message:nimbus.RendezvousMessage)
 #[derive(PartialEq,Clone,Default,Debug)]
 pub struct RendezvousMessage {
@@ -406,8 +808,106 @@ impl RendezvousMessage {
         }
     }
 
+    // .nimbus.TestNatRequest test_nat_request = 20;
+
+    pub fn test_nat_request(&self) -> &TestNatRequest {
+        match self.union {
+            ::std::option::Option::Some(rendezvous_message::Union::TestNatRequest(ref v)) => v,
+            _ => <TestNatRequest as ::protobuf::Message>::default_instance(),
+        }
+    }
+
+    pub fn clear_test_nat_request(&mut self) {
+        self.union = ::std::option::Option::None;
+    }
+
+    pub fn has_test_nat_request(&self) -> bool {
+        match self.union {
+            ::std::option::Option::Some(rendezvous_message::Union::TestNatRequest(..)) => true,
+            _ => false,
+        }
+    }
+
+    // Param is passed by value, moved
+    pub fn set_test_nat_request(&mut self, v: TestNatRequest) {
+        self.union = ::std::option::Option::Some(rendezvous_message::Union::TestNatRequest(v))
+    }
+
+    // Mutable pointer to the field.
+    pub fn mut_test_nat_request(&mut self) -> &mut TestNatRequest {
+        if let ::std::option::Option::Some(rendezvous_message::Union::TestNatRequest(_)) = self.union {
+        } else {
+            self.union = ::std::option::Option::Some(rendezvous_message::Union::TestNatRequest(TestNatRequest::new()));
+        }
+        match self.union {
+            ::std::option::Option::Some(rendezvous_message::Union::TestNatRequest(ref mut v)) => v,
+            _ => panic!(),
+        }
+    }
+
+    // Take field
+    pub fn take_test_nat_request(&mut self) -> TestNatRequest {
+        if self.has_test_nat_request() {
+            match self.union.take() {
+                ::std::option::Option::Some(rendezvous_message::Union::TestNatRequest(v)) => v,
+                _ => panic!(),
+            }
+        } else {
+            TestNatRequest::new()
+        }
+    }
+
+    // .nimbus.TestNatResponse test_nat_response = 21;
+
+    pub fn test_nat_response(&self) -> &TestNatResponse {
+        match self.union {
+            ::std::option::Option::Some(rendezvous_message::Union::TestNatResponse(ref v)) => v,
+            _ => <TestNatResponse as ::protobuf::Message>::default_instance(),
+        }
+    }
+
+    pub fn clear_test_nat_response(&mut self) {
+        self.union = ::std::option::Option::None;
+    }
+
+    pub fn has_test_nat_response(&self) -> bool {
+        match self.union {
+            ::std::option::Option::Some(rendezvous_message::Union::TestNatResponse(..)) => true,
+            _ => false,
+        }
+    }
+
+    // Param is passed by value, moved
+    pub fn set_test_nat_response(&mut self, v: TestNatResponse) {
+        self.union = ::std::option::Option::Some(rendezvous_message::Union::TestNatResponse(v))
+    }
+
+    // Mutable pointer to the field.
+    pub fn mut_test_nat_response(&mut self) -> &mut TestNatResponse {
+        if let ::std::option::Option::Some(rendezvous_message::Union::TestNatResponse(_)) = self.union {
+        } else {
+            self.union = ::std::option::Option::Some(rendezvous_message::Union::TestNatResponse(TestNatResponse::new()));
+        }
+        match self.union {
+            ::std::option::Option::Some(rendezvous_message::Union::TestNatResponse(ref mut v)) => v,
+            _ => panic!(),
+        }
+    }
+
+    // Take field
+    pub fn take_test_nat_response(&mut self) -> TestNatResponse {
+        if self.has_test_nat_response() {
+            match self.union.take() {
+                ::std::option::Option::Some(rendezvous_message::Union::TestNatResponse(v)) => v,
+                _ => panic!(),
+            }
+        } else {
+            TestNatResponse::new()
+        }
+    }
+
     fn generated_message_descriptor_data() -> ::protobuf::reflect::GeneratedMessageDescriptorData {
-        let mut fields = ::std::vec::Vec::with_capacity(2);
+        let mut fields = ::std::vec::Vec::with_capacity(4);
         let mut oneofs = ::std::vec::Vec::with_capacity(1);
         fields.push(::protobuf::reflect::rt::v2::make_oneof_message_has_get_mut_set_accessor::<_, RegisterPeer>(
             "register_peer",
@@ -422,6 +922,20 @@ impl RendezvousMessage {
             RendezvousMessage::register_peer_response,
             RendezvousMessage::mut_register_peer_response,
             RendezvousMessage::set_register_peer_response,
+        ));
+        fields.push(::protobuf::reflect::rt::v2::make_oneof_message_has_get_mut_set_accessor::<_, TestNatRequest>(
+            "test_nat_request",
+            RendezvousMessage::has_test_nat_request,
+            RendezvousMessage::test_nat_request,
+            RendezvousMessage::mut_test_nat_request,
+            RendezvousMessage::set_test_nat_request,
+        ));
+        fields.push(::protobuf::reflect::rt::v2::make_oneof_message_has_get_mut_set_accessor::<_, TestNatResponse>(
+            "test_nat_response",
+            RendezvousMessage::has_test_nat_response,
+            RendezvousMessage::test_nat_response,
+            RendezvousMessage::mut_test_nat_response,
+            RendezvousMessage::set_test_nat_response,
         ));
         oneofs.push(rendezvous_message::Union::generated_oneof_descriptor_data());
         ::protobuf::reflect::GeneratedMessageDescriptorData::new_2::<RendezvousMessage>(
@@ -448,6 +962,12 @@ impl ::protobuf::Message for RendezvousMessage {
                 58 => {
                     self.union = ::std::option::Option::Some(rendezvous_message::Union::RegisterPeerResponse(is.read_message()?));
                 },
+                162 => {
+                    self.union = ::std::option::Option::Some(rendezvous_message::Union::TestNatRequest(is.read_message()?));
+                },
+                170 => {
+                    self.union = ::std::option::Option::Some(rendezvous_message::Union::TestNatResponse(is.read_message()?));
+                },
                 tag => {
                     ::protobuf::rt::read_unknown_or_skip_group(tag, is, self.special_fields.mut_unknown_fields())?;
                 },
@@ -470,6 +990,14 @@ impl ::protobuf::Message for RendezvousMessage {
                     let len = v.compute_size();
                     my_size += 1 + ::protobuf::rt::compute_raw_varint64_size(len) + len;
                 },
+                &rendezvous_message::Union::TestNatRequest(ref v) => {
+                    let len = v.compute_size();
+                    my_size += 2 + ::protobuf::rt::compute_raw_varint64_size(len) + len;
+                },
+                &rendezvous_message::Union::TestNatResponse(ref v) => {
+                    let len = v.compute_size();
+                    my_size += 2 + ::protobuf::rt::compute_raw_varint64_size(len) + len;
+                },
             };
         }
         my_size += ::protobuf::rt::unknown_fields_size(self.special_fields.unknown_fields());
@@ -485,6 +1013,12 @@ impl ::protobuf::Message for RendezvousMessage {
                 },
                 &rendezvous_message::Union::RegisterPeerResponse(ref v) => {
                     ::protobuf::rt::write_message_field_with_cached_size(7, v, os)?;
+                },
+                &rendezvous_message::Union::TestNatRequest(ref v) => {
+                    ::protobuf::rt::write_message_field_with_cached_size(20, v, os)?;
+                },
+                &rendezvous_message::Union::TestNatResponse(ref v) => {
+                    ::protobuf::rt::write_message_field_with_cached_size(21, v, os)?;
                 },
             };
         }
@@ -505,6 +1039,8 @@ impl ::protobuf::Message for RendezvousMessage {
     }
 
     fn clear(&mut self) {
+        self.union = ::std::option::Option::None;
+        self.union = ::std::option::Option::None;
         self.union = ::std::option::Option::None;
         self.union = ::std::option::Option::None;
         self.special_fields.clear();
@@ -547,6 +1083,10 @@ pub mod rendezvous_message {
         RegisterPeer(super::RegisterPeer),
         // @@protoc_insertion_point(oneof_field:nimbus.RendezvousMessage.register_peer_response)
         RegisterPeerResponse(super::RegisterPeerResponse),
+        // @@protoc_insertion_point(oneof_field:nimbus.RendezvousMessage.test_nat_request)
+        TestNatRequest(super::TestNatRequest),
+        // @@protoc_insertion_point(oneof_field:nimbus.RendezvousMessage.test_nat_response)
+        TestNatResponse(super::TestNatResponse),
     }
 
     impl ::protobuf::Oneof for Union {
@@ -566,14 +1106,91 @@ pub mod rendezvous_message {
     }
 }
 
+#[derive(Clone,Copy,PartialEq,Eq,Debug,Hash)]
+// @@protoc_insertion_point(enum:nimbus.NatType)
+pub enum NatType {
+    // @@protoc_insertion_point(enum_value:nimbus.NatType.UNKNOWN_NAT)
+    UNKNOWN_NAT = 0,
+    // @@protoc_insertion_point(enum_value:nimbus.NatType.ASYMMETRIC)
+    ASYMMETRIC = 1,
+    // @@protoc_insertion_point(enum_value:nimbus.NatType.SYMMETRIC)
+    SYMMETRIC = 2,
+}
+
+impl ::protobuf::Enum for NatType {
+    const NAME: &'static str = "NatType";
+
+    fn value(&self) -> i32 {
+        *self as i32
+    }
+
+    fn from_i32(value: i32) -> ::std::option::Option<NatType> {
+        match value {
+            0 => ::std::option::Option::Some(NatType::UNKNOWN_NAT),
+            1 => ::std::option::Option::Some(NatType::ASYMMETRIC),
+            2 => ::std::option::Option::Some(NatType::SYMMETRIC),
+            _ => ::std::option::Option::None
+        }
+    }
+
+    fn from_str(str: &str) -> ::std::option::Option<NatType> {
+        match str {
+            "UNKNOWN_NAT" => ::std::option::Option::Some(NatType::UNKNOWN_NAT),
+            "ASYMMETRIC" => ::std::option::Option::Some(NatType::ASYMMETRIC),
+            "SYMMETRIC" => ::std::option::Option::Some(NatType::SYMMETRIC),
+            _ => ::std::option::Option::None
+        }
+    }
+
+    const VALUES: &'static [NatType] = &[
+        NatType::UNKNOWN_NAT,
+        NatType::ASYMMETRIC,
+        NatType::SYMMETRIC,
+    ];
+}
+
+impl ::protobuf::EnumFull for NatType {
+    fn enum_descriptor() -> ::protobuf::reflect::EnumDescriptor {
+        static descriptor: ::protobuf::rt::Lazy<::protobuf::reflect::EnumDescriptor> = ::protobuf::rt::Lazy::new();
+        descriptor.get(|| file_descriptor().enum_by_package_relative_name("NatType").unwrap()).clone()
+    }
+
+    fn descriptor(&self) -> ::protobuf::reflect::EnumValueDescriptor {
+        let index = *self as usize;
+        Self::enum_descriptor().value_by_index(index)
+    }
+}
+
+impl ::std::default::Default for NatType {
+    fn default() -> Self {
+        NatType::UNKNOWN_NAT
+    }
+}
+
+impl NatType {
+    fn generated_enum_descriptor_data() -> ::protobuf::reflect::GeneratedEnumDescriptorData {
+        ::protobuf::reflect::GeneratedEnumDescriptorData::new::<NatType>("NatType")
+    }
+}
+
 static file_descriptor_proto_data: &'static [u8] = b"\
     \n\x10rendezvous.proto\x12\x06nimbus\"6\n\x0cRegisterPeer\x12\x0e\n\x02i\
     d\x18\x01\x20\x01(\tR\x02id\x12\x16\n\x06serial\x18\x02\x20\x01(\x05R\
     \x06serial\"5\n\x14RegisterPeerResponse\x12\x1d\n\nrequest_pk\x18\x02\
-    \x20\x01(\x08R\trequestPk\"\xaf\x01\n\x11RendezvousMessage\x12;\n\rregis\
-    ter_peer\x18\x06\x20\x01(\x0b2\x14.nimbus.RegisterPeerH\0R\x0cregisterPe\
-    er\x12T\n\x16register_peer_response\x18\x07\x20\x01(\x0b2\x1c.nimbus.Reg\
-    isterPeerResponseH\0R\x14registerPeerResponseB\x07\n\x05unionb\x06proto3\
+    \x20\x01(\x08R\trequestPk\"{\n\tPunchHole\x12\x1f\n\x0bsocket_addr\x18\
+    \x01\x20\x01(\x0cR\nsocketAddr\x12!\n\x0crelay_server\x18\x02\x20\x01(\t\
+    R\x0brelayServer\x12*\n\x08nat_type\x18\x03\x20\x01(\x0e2\x0f.nimbus.Nat\
+    TypeR\x07natType\"(\n\x0eTestNatRequest\x12\x16\n\x06serial\x18\x01\x20\
+    \x01(\x05R\x06serial\"%\n\x0fTestNatResponse\x12\x12\n\x04port\x18\x01\
+    \x20\x01(\x05R\x04port\"\xba\x02\n\x11RendezvousMessage\x12;\n\rregister\
+    _peer\x18\x06\x20\x01(\x0b2\x14.nimbus.RegisterPeerH\0R\x0cregisterPeer\
+    \x12T\n\x16register_peer_response\x18\x07\x20\x01(\x0b2\x1c.nimbus.Regis\
+    terPeerResponseH\0R\x14registerPeerResponse\x12B\n\x10test_nat_request\
+    \x18\x14\x20\x01(\x0b2\x16.nimbus.TestNatRequestH\0R\x0etestNatRequest\
+    \x12E\n\x11test_nat_response\x18\x15\x20\x01(\x0b2\x17.nimbus.TestNatRes\
+    ponseH\0R\x0ftestNatResponseB\x07\n\x05union*9\n\x07NatType\x12\x0f\n\
+    \x0bUNKNOWN_NAT\x10\0\x12\x0e\n\nASYMMETRIC\x10\x01\x12\r\n\tSYMMETRIC\
+    \x10\x02b\x06proto3\
 ";
 
 /// `FileDescriptorProto` object which was a source for this generated file
@@ -591,11 +1208,15 @@ pub fn file_descriptor() -> &'static ::protobuf::reflect::FileDescriptor {
     file_descriptor.get(|| {
         let generated_file_descriptor = generated_file_descriptor_lazy.get(|| {
             let mut deps = ::std::vec::Vec::with_capacity(0);
-            let mut messages = ::std::vec::Vec::with_capacity(3);
+            let mut messages = ::std::vec::Vec::with_capacity(6);
             messages.push(RegisterPeer::generated_message_descriptor_data());
             messages.push(RegisterPeerResponse::generated_message_descriptor_data());
+            messages.push(PunchHole::generated_message_descriptor_data());
+            messages.push(TestNatRequest::generated_message_descriptor_data());
+            messages.push(TestNatResponse::generated_message_descriptor_data());
             messages.push(RendezvousMessage::generated_message_descriptor_data());
-            let mut enums = ::std::vec::Vec::with_capacity(0);
+            let mut enums = ::std::vec::Vec::with_capacity(1);
+            enums.push(NatType::generated_enum_descriptor_data());
             ::protobuf::reflect::GeneratedFileDescriptor::new_generated(
                 file_descriptor_proto(),
                 deps,

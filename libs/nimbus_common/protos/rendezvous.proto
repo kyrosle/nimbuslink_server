@@ -8,9 +8,29 @@ message RegisterPeer {
 
 message RegisterPeerResponse { bool request_pk = 2; }
 
+enum NatType {
+  UNKNOWN_NAT = 0;
+  ASYMMETRIC = 1;
+  SYMMETRIC = 2;
+}
+
+message PunchHole {
+  bytes socket_addr = 1;
+  string relay_server = 2;
+  NatType nat_type = 3;
+}
+
+message TestNatRequest { int32 serial = 1; }
+
+message TestNatResponse {
+  int32 port = 1;
+}
+
 message RendezvousMessage {
   oneof union {
     RegisterPeer register_peer = 6;
     RegisterPeerResponse register_peer_response = 7;
+    TestNatRequest test_nat_request = 20;
+    TestNatResponse test_nat_response = 21;
   }
 }
