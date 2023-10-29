@@ -7,9 +7,12 @@ use tokio_socks::{IntoTargetAddr, TargetAddr};
 use crate::{
   config::{Config, NetWorkType},
   is_ipv4_str, is_ipv6_str,
+  tcp::FramedStream,
   udp::FramedSocket,
   ResultType,
 };
+
+use self::is_resolved_socket_addr::IsResolvedSocketAddr;
 
 pub mod is_resolved_socket_addr;
 
@@ -67,6 +70,49 @@ pub fn test_if_valid_server(host: &str) -> String {
       Ok(_) => "".to_owned(),
     },
   }
+}
+
+#[inline]
+pub async fn connect_tcp<
+  't,
+  T: IntoTargetAddr<'t> + ToSocketAddrs + IsResolvedSocketAddr + std::fmt::Display,
+>(
+  target: T,
+  ms_timeout: u64,
+) -> ResultType<FramedStream> {
+  connect_tcp_local(target, None, ms_timeout).await
+}
+
+pub async fn connect_tcp_local<
+  't,
+  T: IntoTargetAddr<'t> + ToSocketAddrs + IsResolvedSocketAddr + std::fmt::Display,
+>(
+  target: T,
+  local: Option<SocketAddr>,
+  ms_timeout: u64,
+) -> ResultType<FramedStream> {
+  if let Some(conf) = Config::get_socks() {
+    return FramedStream::connect(
+      conf.proxy.as_str(),
+      target,
+      local,
+      conf.username.as_str(),
+      conf.password.as_str(),
+      ms_timeout,
+    )
+    .await;
+  }
+
+  if let Some(target) = target.resolve() {
+    if let Some(local) = local {
+      if local.is_ipv6() && target.is_ipv4() {
+        let target = query_nip_io(target).await?;
+        return FramedStream::new(target, Some(local), ms_timeout).await;
+      }
+    }
+  }
+
+  FramedStream::new(target, local, ms_timeout).await
 }
 
 #[inline]
