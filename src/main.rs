@@ -1,19 +1,11 @@
-use flexi_logger::{colored_opt_format, Logger};
-use nimbus_common::{logger::*, ResultType};
+use nimbus_common::ResultType;
 
 use crate::rendezvous_server::RendezvousServer;
 
 pub mod rendezvous_server;
 
 fn main() -> ResultType<()> {
-  let _logger = Logger::try_with_env_or_str("debug")?
-    .log_to_stdout()
-    .set_palette("196;208;7;80;8".to_string())
-    .format(colored_opt_format)
-    .write_mode(flexi_logger::WriteMode::Async)
-    .start()?;
-  info!("logger init finished");
-
+  nimbus_common::common::logger_initialize::init!();
   let port = 8080;
   RendezvousServer::start(port, 0)?;
   Ok(())

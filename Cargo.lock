@@ -679,6 +679,7 @@ dependencies = [
  "bytes",
  "chrono",
  "env_logger",
+ "flexi_logger",
  "futures",
  "futures-util",
  "log",
@@ -702,7 +703,6 @@ dependencies = [
 name = "nimbuslink_server"
 version = "0.1.0"
 dependencies = [
- "flexi_logger",
  "local-ip-address",
  "nimbus_common",
  "tokio-tungstenite",

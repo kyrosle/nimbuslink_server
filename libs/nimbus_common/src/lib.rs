@@ -1,7 +1,9 @@
 // common module
 pub mod bytes_codec;
+pub mod common;
 pub mod compress;
 pub mod config;
+pub mod protos;
 pub mod socket_client;
 pub mod tcp;
 pub mod udp;
@@ -10,18 +12,19 @@ pub mod config;
 pub mod protos;
 
 // extern
+pub use anyhow;
 pub use bytes;
 pub use env_logger;
 pub use futures;
 pub use log;
+pub use protobuf;
 pub use tokio;
 pub use tokio_util;
-pub use anyhow;
-pub use protobuf;
+pub use flexi_logger;
 
 // export the logger function
 pub mod logger {
-  pub use log::{debug, error, info, warn, trace};
+  pub use log::{debug, error, info, log, trace, warn};
 }
 
 pub type ResultType<F, E = anyhow::Error> = anyhow::Result<F, E>;
