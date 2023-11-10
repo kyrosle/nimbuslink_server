@@ -7,9 +7,6 @@ pub mod protos;
 pub mod socket_client;
 pub mod tcp;
 pub mod udp;
-pub mod compress;
-pub mod config;
-pub mod protos;
 
 // extern
 pub use anyhow;
