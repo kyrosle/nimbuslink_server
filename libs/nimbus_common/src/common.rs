@@ -16,7 +16,7 @@ use crate::ResultType;
 
 pub mod logger_initialize {
   #[macro_export]
-  macro_rules! init {
+  macro_rules! logger_init {
     () => {
       let _logger =
         nimbus_common::flexi_logger::Logger::try_with_env_or_str("debug")?
@@ -28,7 +28,7 @@ pub mod logger_initialize {
       nimbus_common::logger::info!("logger init finished");
     };
   }
-  pub use init;
+  pub use logger_init;
 }
 
 // pub fn logger_initialize() -> ResultType<()> {
