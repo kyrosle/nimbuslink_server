@@ -80,6 +80,7 @@ async fn test_nat_type_client_() -> ResultType<bool> {
 
   let start = std::time::Instant::now();
   // let (rendezvous_server, _, _) =
+  // let server1 = "x.x.x.x:8080";
   let server1 = "127.0.0.1:8080";
   let server2 = increase_port(server1, -1);
 
