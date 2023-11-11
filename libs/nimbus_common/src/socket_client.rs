@@ -182,7 +182,20 @@ async fn new_udp<T: ToSocketAddrs>(
   local: T,
   ms_timeout: u64,
 ) -> ResultType<FramedSocket> {
-  FramedSocket::new(local).await
+  match Config::get_socks() {
+    None => Ok(FramedSocket::new(local).await?),
+    Some(conf) => {
+      let socket = FramedSocket::new_proxy(
+        conf.proxy.as_str(),
+        local,
+        conf.username.as_str(),
+        conf.password.as_str(),
+        ms_timeout,
+      )
+      .await?;
+      Ok(socket)
+    }
+  }
 }
 
 #[cfg(test)]
