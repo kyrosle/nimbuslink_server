@@ -1,6 +1,7 @@
 use std::net::SocketAddr;
 
 use nimbus_common::{
+  allow_err,
   bytes::Bytes,
   futures::SinkExt,
   protobuf::Message,

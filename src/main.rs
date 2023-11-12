@@ -1,8 +1,6 @@
 use nimbus_common::ResultType;
 
-use crate::rendezvous_server::RendezvousServer;
-
-pub mod rendezvous_server;
+use nimbuslink_server::rendezvous_server::RendezvousServer;
 
 fn main() -> ResultType<()> {
   nimbus_common::common::logger_initialize::logger_init!();

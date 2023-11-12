@@ -23,6 +23,8 @@
     "reuseport",
     "rustdesk",
     "secretbox",
-    "sodiumoxide"
-  ]
+    "sodiumoxide",
+    "tungstenite"
+  ],
+  "rust-analyzer.showUnlinkedFileNotification": false
 }

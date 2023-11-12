@@ -1,6 +1,7 @@
 use std::net::SocketAddr;
 
 use nimbus_common::{
+  allow_err,
   bytes_codec::BytesCodec,
   futures::StreamExt,
   logger::*,
@@ -9,7 +10,6 @@ use nimbus_common::{
   tokio_util::codec::Framed,
   ResultType,
 };
-use nimbuslink_server::allow_err;
 
 use crate::rendezvous_server::Sink;
 

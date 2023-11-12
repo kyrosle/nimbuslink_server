@@ -5,9 +5,8 @@ use nimbus_common::{
   logger::*,
   timeout,
   tokio::{self, net::TcpStream},
-  ResultType,
+  ResultType, allow_err,
 };
-use nimbuslink_server::allow_err;
 
 use super::{RendezvousServer, Sink};
 

@@ -12,12 +12,12 @@ pub mod udp;
 pub use anyhow;
 pub use bytes;
 pub use env_logger;
+pub use flexi_logger;
 pub use futures;
 pub use log;
 pub use protobuf;
 pub use tokio;
 pub use tokio_util;
-pub use flexi_logger;
 
 // export the logger function
 pub mod logger {
@@ -52,4 +52,21 @@ pub fn is_ipv6_str(id: &str) -> bool {
   } else {
     false
   }
+}
+
+#[macro_export]
+macro_rules! allow_err {
+  ($e: expr) => {
+    if let Err(err) = $e {
+      nimbus_common::logger::debug!(
+        "{:?}, {}:{}:{}:{}",
+        err,
+        module_path!(),
+        file!(),
+        line!(),
+        column!()
+      );
+    } else {
+    }
+  };
 }

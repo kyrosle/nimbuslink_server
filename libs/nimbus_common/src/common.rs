@@ -1,8 +1,5 @@
 use std::net::SocketAddr;
 
-use flexi_logger::{
-  self, colored_opt_format, FlexiLoggerError, Logger, LoggerHandle,
-};
 use protobuf::Message;
 
 use crate::config::{Config, CONNECT_TIMEOUT, READ_TIMEOUT};
