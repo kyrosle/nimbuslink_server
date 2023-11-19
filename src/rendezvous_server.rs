@@ -1,4 +1,5 @@
 use std::{
+  collections::HashMap,
   net::{IpAddr, Ipv4Addr, Ipv6Addr, SocketAddr},
   sync::Arc,
   time::Duration,
@@ -33,7 +34,10 @@ use nimbus_common::{
   ResultType,
 };
 
+use crate::peer::PeerMap;
+
 type TcpStreamSink = SplitSink<Framed<TcpStream, BytesCodec>, Bytes>;
+type RelayServers = Vec<String>;
 type WsSink = SplitSink<
   tokio_tungstenite::WebSocketStream<TcpStream>,
   tungstenite::Message,
@@ -52,6 +56,10 @@ struct Inner {
 
 #[derive(Clone)]
 pub struct RendezvousServer {
+  peer_map: PeerMap,
+  relay_servers: Arc<RelayServers>,
+  relay_servers0: Arc<RelayServers>,
+  rendezvous_servers: Arc<Vec<String>>,
   inner: Arc<Inner>,
 }
 
@@ -88,6 +96,10 @@ impl RendezvousServer {
         local_ip,
         serial: SERIAL,
       }),
+      peer_map: PeerMap::new().await?,
+      relay_servers: Arc::new(vec![]),
+      relay_servers0: Arc::new(vec![]),
+      rendezvous_servers: Arc::new(vec![]),
     };
 
     let mut port_listener = create_tcp_listener(port).await?;

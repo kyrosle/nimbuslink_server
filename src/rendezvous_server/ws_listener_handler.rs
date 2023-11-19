@@ -45,7 +45,9 @@ impl RendezvousServer {
       }
     }
 
-    if sink.is_none() {}
+    if sink.is_none() {
+      // TODO: tcp_punch remove addr
+    }
 
     debug!("Tcp connection from {:?} closed, websocket listener", addr);
 
